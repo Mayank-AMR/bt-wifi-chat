@@ -6,7 +6,7 @@ package com.amrtech.bt_wificonnectionplayaround
  */
 
 import android.app.Application
-//import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.android.HiltAndroidApp
 
-//@HiltAndroidApp
+@HiltAndroidApp
 class BtWifiApp : Application()

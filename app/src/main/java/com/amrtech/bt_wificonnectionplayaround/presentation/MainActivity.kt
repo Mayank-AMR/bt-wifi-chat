@@ -13,16 +13,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.amrtech.bt_wificonnectionplayaround.presentation.components.DeviceScreen
 import com.amrtech.bt_wificonnectionplayaround.ui.theme.BtWifiConnectionPlayAroundTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val bluetoothManager by lazy {
         applicationContext.getSystemService(BluetoothManager::class.java)
@@ -44,18 +43,18 @@ class MainActivity : ComponentActivity() {
         val permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { perms ->
-            val canEnableBluetooth = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val canEnableBluetooth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 perms[Manifest.permission.BLUETOOTH_CONNECT] == true
             } else true
 
-            if(canEnableBluetooth && !isBluetoothEnabled) {
+            if (canEnableBluetooth && !isBluetoothEnabled) {
                 enableBluetoothLauncher.launch(
                     Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 )
             }
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.BLUETOOTH_SCAN,
@@ -66,19 +65,35 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             BtWifiConnectionPlayAroundTheme {
-//                val viewModel = hiltViewModel<BluetoothViewModel>()
-//                val state by viewModel.state.collectAsState()
+                val viewModel = hiltViewModel<BluetoothViewModel>()
+                val state by viewModel.state.collectAsState()
                 Surface(
                     color = MaterialTheme.colorScheme.background,
                     modifier = Modifier.fillMaxSize()
                 ) {
-//                    DeviceScreen(
-//                        state = state,
-//                        onStartScan = viewModel::startScan,
-//                        onStopScan = viewModel::stopScan
-//                    )
+                    DeviceScreen(
+                        state = state,
+                        onStartScan = viewModel::startScan,
+                        onStopScan = viewModel::stopScan
+                    )
                 }
             }
         }
     }
 }
+
+//@Composable
+//fun Greeting(name: String, modifier: Modifier = Modifier) {
+//    Text(
+//        text = "Hello $name!",
+//        modifier = modifier
+//    )
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview() {
+//    BtWifiConnectionPlayAroundTheme {
+//        Greeting("Android")
+//    }
+//}

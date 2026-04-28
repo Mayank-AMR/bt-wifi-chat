@@ -7,13 +7,15 @@ package com.amrtech.bt_wificonnectionplayaround.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amrtech.bt_wificonnectionplayaround.domain.chat.BluetoothController
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-//@HiltViewModel
-class BluetoothViewModel constructor(
+@HiltViewModel
+class BluetoothViewModel @Inject constructor(
     private val bluetoothController: BluetoothController
 ): ViewModel() {
 
